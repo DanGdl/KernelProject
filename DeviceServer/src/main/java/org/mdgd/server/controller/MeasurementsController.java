@@ -82,7 +82,7 @@ public class MeasurementsController {
     public String edit(Map<String, Object> model, @PathVariable("id") Integer id) throws DaoException {
         model.put("mode", "edit");
         final Optional<Measurement> entity = service.get(id.longValue());
-        model.put("entity", entity.orElseGet(() -> null));
+        model.put("entity", entity.orElse(null));
         return "course";
     }
 
@@ -90,7 +90,7 @@ public class MeasurementsController {
     public String delete(Map<String, Object> model, @PathVariable("id") Integer id) throws DaoException {
         model.put("mode", "delete");
         final Optional<Measurement> entity = service.get(id.longValue());
-        model.put("person", entity.orElseGet(() -> null));
+        model.put("person", entity.orElse(null));
         return "course";
     }
 }

@@ -48,6 +48,5 @@ public abstract class AbstractDaoService<T, D extends CrudRepository<T, Long>> i
 			return;
 		}
 		getDao().deleteById(id);
-		;
 	}
 }
