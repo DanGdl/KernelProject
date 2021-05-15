@@ -263,7 +263,7 @@
     </dependencies>
 
     <build>
-        <finalName>UniversityApp</finalName>
+        <finalName>DeviceServer</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
