@@ -23,10 +23,12 @@ public class MeasurementsController {
     @GetMapping({"", "/"})
     public String action(Map<String, Object> model, @RequestParam Map<String, String> body) {
         String status = body.get("status");
-        try {
-            model.put("entities", service.get(new LinkedList<>()));
-        } catch (DaoException e) {
-            status = "Error, when reading entities";
+        if (Strings.isEmpty(status)) {
+            try {
+                model.put("entities", service.get(new LinkedList<>()));
+            } catch (DaoException e) {
+                status = "Error, when reading entities";
+            }
         }
         model.put("mode", "list");
         model.put("status", status);
@@ -40,25 +42,37 @@ public class MeasurementsController {
         if (!Strings.isEmpty(action)) {
             final Measurement entity = new Measurement();
             if (!Strings.isEmpty(body.get("id"))) {
-                entity.setId(Long.valueOf(body.get("id")));
+                entity.setId(Long.parseLong(body.get("id")));
             }
-            entity.setName(body.get("name"));
-            switch (action) {
-                case ("editAction"):
-                    try {
-                        service.save(Collections.singletonList(entity));
-                    } catch (DaoException e) {
-                        status = "Error, when update entities";
-                    }
-                    break;
-                case ("deleteAction"):
-                    try {
-                        service.deleteById(entity.getId());
-                    } catch (DaoException e) {
-                        status = "Error, when delete entities";
-                    }
-                    break;
+            try {
+                entity.setDestinationAddress(Integer.parseInt(body.get("destinationAddress")));
+                entity.setSourceAddress(Integer.parseInt(body.get("sourceAddress")));
+                entity.setGasPressure(Integer.parseInt(body.get("gasPressure")));
+                entity.setValvesState(Integer.parseInt(body.get("valvesState")));
+                entity.setPipeTemperature(Integer.parseInt(body.get("pipeTemperature")));
+                entity.setPayload(body.get("payload"));
+
+                switch (action) {
+                    case ("editAction"):
+                        try {
+                            service.save(Collections.singletonList(entity));
+                        } catch (DaoException e) {
+                            status = "Error, when update entities";
+                        }
+                        break;
+                    case ("deleteAction"):
+                        try {
+                            service.deleteById(entity.getId());
+                        } catch (DaoException e) {
+                            status = "Error, when delete entities";
+                        }
+                        break;
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+                body.put("status", "Some data is not valid. " + e.getMessage());
             }
+
         }
         body.put("status", status);
         return action(model, body);
