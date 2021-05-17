@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.foxminded.dao.DaoException;
-import com.foxminded.domain.Device;
+import com.foxminded.dto.Device;
 import com.foxminded.service.device.DevicesService;
 import com.foxminded.util.CollectionsUtil;
 
@@ -42,7 +42,9 @@ public class DeviceRestController {
 
 	@PostMapping("/rest/devices")
 	public void update(@RequestBody List<Device> entities) {
-		if (CollectionsUtil.isEmpty(entities)) return;
+		if (CollectionsUtil.isEmpty(entities)) {
+			return;
+		}
 		try {
 			service.save(entities);
 		} catch (DaoException e) {

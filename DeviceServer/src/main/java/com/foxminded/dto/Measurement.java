@@ -1,4 +1,4 @@
-package com.foxminded.domain;
+package com.foxminded.dto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +15,8 @@ public class Measurement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private int destinationAddress;
-    private int sourceAddress;
+    private String destinationAddress;
+    private String sourceAddress;
     private int gasPressure;
     private int valvesState;
     private int pipeTemperature;
@@ -34,19 +34,19 @@ public class Measurement {
         this.id = id;
     }
 
-    public int getDestinationAddress() {
+    public String getDestinationAddress() {
         return destinationAddress;
     }
 
-    public void setDestinationAddress(int destinationAddress) {
+    public void setDestinationAddress(String destinationAddress) {
         this.destinationAddress = destinationAddress;
     }
 
-    public int getSourceAddress() {
+    public String getSourceAddress() {
         return sourceAddress;
     }
 
-    public void setSourceAddress(int sourceAddress) {
+    public void setSourceAddress(String sourceAddress) {
         this.sourceAddress = sourceAddress;
     }
 

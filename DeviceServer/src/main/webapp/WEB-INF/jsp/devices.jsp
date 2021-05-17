@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 	<jsp:include page="header.jsp"/>
@@ -15,6 +16,7 @@
 		        <jsp:include page="devices_list.jsp"/>
 		    </c:otherwise>
 		</c:choose>
-		<br><br><a href="./">&lt&ltBack</a>
+		<br><br>
+		<button type="button" name="back" onclick="history.back()">Back</button>
 	</body>
 </html>

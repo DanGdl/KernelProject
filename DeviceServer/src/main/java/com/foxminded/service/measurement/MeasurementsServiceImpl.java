@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.foxminded.dao.MeasurementsDao;
-import com.foxminded.domain.Measurement;
+import com.foxminded.dto.Measurement;
 import com.foxminded.service.infra.AbstractDaoService;
 
 @Service

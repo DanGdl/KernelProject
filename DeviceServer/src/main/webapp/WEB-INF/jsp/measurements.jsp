@@ -1,11 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 	<jsp:include page="header.jsp"/>
 	<body>
 		<h3>Welcome to Devices Server!</h3>
-		<h4>${mode}</h4>
-		<h4>${status}</h4>
 		<c:choose>
 		    <c:when test="${mode == 'edit'}">
 		        <jsp:include page="measurements_edit.jsp"/>
@@ -17,6 +16,6 @@
 		        <jsp:include page="measurements_list.jsp"/>
 		    </c:otherwise>
 		</c:choose>
-		<br><br><a href="./">&lt&ltBack</a>
+		<button type="button" name="back" onclick="history.back()">Back</button>
 	</body>
 </html>

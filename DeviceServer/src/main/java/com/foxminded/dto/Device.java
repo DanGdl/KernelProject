@@ -1,4 +1,4 @@
-package com.foxminded.domain;
+package com.foxminded.dto;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ public class Device {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
+	private String address;
 	
 	@OneToMany
 	private List<Measurement> measurements;
@@ -24,7 +25,13 @@ public class Device {
     public Device() {
     }
     
-    public long getId() {
+    public Device(String name, String address, List<Measurement> measurements) {
+		this.name = name;
+		this.address = address;
+		this.measurements = measurements;
+	}
+
+	public long getId() {
         return id;
     }
 
@@ -46,5 +53,13 @@ public class Device {
 	
 	public String getName() {
 		return name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

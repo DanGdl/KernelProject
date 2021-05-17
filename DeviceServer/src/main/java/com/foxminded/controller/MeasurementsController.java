@@ -6,11 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.foxminded.dao.DaoException;
-import com.foxminded.domain.Measurement;
+import com.foxminded.dto.Device;
+import com.foxminded.dto.Measurement;
+import com.foxminded.service.device.DevicesService;
 import com.foxminded.service.measurement.MeasurementsService;
+import com.foxminded.util.CollectionsUtil;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,6 +26,9 @@ public class MeasurementsController {
     @Autowired
     private MeasurementsService service;
 
+    @Autowired
+	private DevicesService devicesService;
+    
     @GetMapping({"", "/"})
     public String action(Map<String, Object> model, @RequestParam Map<String, String> body) {
         String status = body.get("status");
@@ -33,7 +41,7 @@ public class MeasurementsController {
         }
         model.put("mode", "list");
         model.put("status", status);
-        return "measurement";
+        return "measurements";
     }
 
     @PostMapping({"", "/"})
@@ -46,17 +54,27 @@ public class MeasurementsController {
                 entity.setId(Long.parseLong(body.get("id")));
             }
             try {
-                entity.setDestinationAddress(Integer.parseInt(body.get("destinationAddress")));
-                entity.setSourceAddress(Integer.parseInt(body.get("sourceAddress")));
-                entity.setGasPressure(Integer.parseInt(body.get("gasPressure")));
-                entity.setValvesState(Integer.parseInt(body.get("valvesState")));
-                entity.setPipeTemperature(Integer.parseInt(body.get("pipeTemperature")));
-                entity.setPayload(body.get("payload"));
+            	// TODO: validate not empty
+            	
+                entity.setDestinationAddress(body.get("destinationAddress").trim());
+                entity.setSourceAddress(body.get("sourceAddress").trim());
+                entity.setGasPressure(Integer.parseInt(body.get("gasPressure").trim()));
+                entity.setValvesState(Integer.parseInt(body.get("valvesState").trim()));
+                entity.setPipeTemperature(Integer.parseInt(body.get("pipeTemperature").trim()));
+                entity.setPayload(body.get("payload").trim());
 
                 switch (action) {
                     case ("editAction"):
                         try {
-                            service.save(Collections.singletonList(entity));
+                        	String destination = entity.getDestinationAddress();
+                			List<Device> devices = devicesService.getByAddress(new ArrayList<>(Collections.singletonList(destination)));
+                			if (CollectionsUtil.isEmpty(devices)) {
+                				devices.add(new Device("Device " + destination, destination, Collections.singletonList(entity)));
+                			} else {
+                				devices.get(0).getMeasurements().add(entity);
+                			}
+                			service.save(Collections.singletonList(entity));
+                			devicesService.save(devices);
                         } catch (DaoException e) {
                             status = "Error, when update entities";
                         }

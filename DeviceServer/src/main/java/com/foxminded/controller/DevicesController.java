@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.foxminded.dao.DaoException;
-import com.foxminded.domain.Device;
+import com.foxminded.dto.Device;
 import com.foxminded.service.device.DevicesService;
 
 import java.util.Collections;
@@ -35,7 +35,6 @@ public class DevicesController {
         }
         model.put("mode", "list");
         model.put("status", status);
-        model.put("myTag", "Ololo");
         return "devices";
     }
 
@@ -49,7 +48,11 @@ public class DevicesController {
                 entity.setId(Long.parseLong(body.get("id")));
             }
             try {
+            	if (Strings.isEmpty(body.get("name")) || Strings.isEmpty(body.get("address"))) {
+            		throw new IllegalArgumentException("Name and address must not be empty");
+            	}
                 entity.setName(body.get("name"));
+                entity.setAddress(body.get("address").trim());
                 switch (action) {
                     case ("editAction"):
                         try {
